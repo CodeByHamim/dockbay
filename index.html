@@ -9,12 +9,12 @@
        - BRAND_NAME       : JS const below
        - FORM_ENDPOINT    : JS const below (Formspree/Tally/Getform/own API)
        - PLANS            : JS array below (prices + specs)
-       - Colors           : CSS custom properties in :root
-       - Analytics        : Plausible snippet + trackEvent() below
+       - Colors           : CSS custom properties in :root / [data-theme]
+       - Analytics        : Cloudflare Web Analytics (dashboard) + trackEvent() below
   ============================================================ -->
 <title>Dockbay — Deploy with git push. Never get a surprise bill.</title>
 <meta name="description" content="Dockbay is a developer hosting platform in early research. Fixed monthly prices, a hard spending cap, git push deploys. Join the early-access waitlist.">
-<link rel="canonical" href="https://example.com/">
+<link rel="canonical" href="https://dockbay.pinnateai.workers.dev/">
 <!-- Validation test page: remove this meta tag when you want search engines to index it -->
 <meta name="robots" content="noindex">
 
@@ -22,9 +22,8 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Dockbay — Deploy with git push. Never get a surprise bill.">
 <meta property="og:description" content="A developer hosting platform with fixed monthly prices and a hard spending cap. In early research — join the waitlist.">
-<meta property="og:url" content="https://example.com/">
-<meta property="og:image" content="https://example.com/og.png">
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://dockbay.pinnateai.workers.dev/">
+<meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dockbay — Deploy with git push. Never get a surprise bill.">
 <meta name="twitter:description" content="Fixed monthly prices and a hard spending cap. Early access waitlist open.">
 
@@ -32,9 +31,7 @@
 <!-- Inline SVG favicon (anchor) -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b1f33'/%3E%3Cpath d='M16 5v12' stroke='%2339c6c0' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='19' r='3.5' fill='none' stroke='%2339c6c0' stroke-width='2.5'/%3E%3Cpath d='M7 26h18' stroke='%23f4a259' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
 
-<!-- Analytics: Plausible — uncomment and set your domain
-<script defer data-domain="yourdomain.com" src="https://plausible.io/js/script.js"></script>
--->
+<!-- Analytics: enable Cloudflare Web Analytics from the Cloudflare Pages dashboard (Metrics tab). No script is needed here. Custom events are not supported by that tool; signup data, preferred plan, UTM values and referrer are captured in the form submission. -->
 
 <style>
 /* ================= THEME TOKENS ================= */
@@ -143,7 +140,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--surfa
 .card .icon{color:var(--teal-bright);margin-bottom:.75rem}
 
 /* steps */
-.steps{display:grid;gap:20px;margin-top:2rem}
+.steps{display:grid;gap:20px;margin-top:2rem;counter-reset:step}
 @media (min-width:768px){.steps{grid-template-columns:repeat(3,1fr)}}
 .step{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:var(--shadow)}
 .step .num{display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;border-radius:50%;background:var(--teal);color:#fff;font-weight:700;margin-bottom:.75rem}
@@ -202,6 +199,11 @@ footer{padding:40px 0;border-top:1px solid var(--line);font-size:.88rem;color:va
 footer .cols{display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:space-between;align-items:center}
 footer a{color:var(--ink-soft)}
 footer .note{margin-top:1.25rem;font-size:.8rem}
+
+/* legal sections (privacy / terms) */
+.narrow{max-width:720px;margin:0 auto}
+.narrow h2{margin-bottom:1rem}
+.narrow p{margin-bottom:.75rem;color:var(--ink-soft);font-size:.95rem}
 </style>
 </head>
 <body>
@@ -210,7 +212,7 @@ footer .note{margin-top:1.25rem;font-size:.8rem}
 <header>
   <nav class="wrap nav" aria-label="Main">
     <a class="logo" href="#top">
-      <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#0b1f33"/><path d="M16 5v12" stroke="#39c6c0" stroke-width="2.5" stroke-linecap="round"/><circle cx="16" cy="19" r="3.5" fill="none" stroke="#39c6c0" stroke-width="2.5"/><path d="M7 26h18" stroke="#e8871e" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="var(--brand)" style="fill:#0b1f33"/><path d="M16 5v12" stroke="#39c6c0" stroke-width="2.5" stroke-linecap="round"/><circle cx="16" cy="19" r="3.5" fill="none" stroke="#39c6c0" stroke-width="2.5"/><path d="M7 26h18" stroke="#e8871e" stroke-width="2.5" stroke-linecap="round"/></svg>
       <span id="brand-name">Dockbay</span>
     </a>
     <ul class="nav-links">
@@ -435,6 +437,32 @@ footer .note{margin-top:1.25rem;font-size:.8rem}
   <p>Join the early-access waitlist and help shape pricing that doesn't surprise anyone.</p>
   <a class="btn btn-primary" href="#waitlist" data-cta="final-banner">Join the waitlist</a>
 </section>
+
+<!-- ============ PRIVACY ============ -->
+<section class="section" id="privacy">
+  <div class="wrap">
+    <div class="narrow">
+      <h2>Privacy</h2>
+      <p>Through the waitlist form we collect your email address and the optional answers you give (current host, monthly spend range, preferred plan, frustration text, whether you're open to a chat), plus the page referrer and any UTM campaign values in the link you arrived from.</p>
+      <p>We use this to contact you about early access and to understand what developers need. We do not sell your data and we do not send marketing from third parties.</p>
+      <p>Your answers are stored in a Google Sheet that only the project owner can access, which means they are processed by Google. To ask for a copy of your data or have it deleted, email <a href="mailto:pinnateai@gmail.com">pinnateai@gmail.com</a>.</p>
+      <p>This page does not use advertising cookies. Basic, privacy-friendly traffic statistics may be collected by the hosting provider.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TERMS ============ -->
+<section class="section" id="terms">
+  <div class="wrap">
+    <div class="narrow">
+      <h2>Terms</h2>
+      <p>This is an early-research page. The product does not exist yet and no service is offered or promised.</p>
+      <p>Features, prices and plans shown are planned and may change or never launch.</p>
+      <p>Joining the waitlist creates no purchase obligation and no guarantee of access.</p>
+      <p>Dockbay is a working name and may change.</p>
+    </div>
+  </div>
+</section>
 </main>
 
 <!-- ============ FOOTER ============ -->
@@ -443,7 +471,7 @@ footer .note{margin-top:1.25rem;font-size:.8rem}
     <div class="cols">
       <span id="footer-brand">Dockbay</span>
       <nav aria-label="Footer">
-        <a href="#privacy">Privacy</a> · <a href="#terms">Terms</a> · <a href="mailto:hello@example.com">hello@example.com</a>
+        <a href="#privacy">Privacy</a> · <a href="#terms">Terms</a> · <a href="mailto:pinnateai@gmail.com">pinnateai@gmail.com</a>
       </nav>
       <span>© <span id="year"></span> <span class="brand-copy">Dockbay</span>. All rights reserved.</span>
     </div>
@@ -457,17 +485,18 @@ footer .note{margin-top:1.25rem;font-size:.8rem}
 
   /* ============ CONFIG — CHANGE THESE ============ */
   const BRAND_NAME = "Dockbay";                       // CHANGE BRAND NAME (one place)
-  const FORM_ENDPOINT = "";                          // CHANGE: your Formspree/Tally/Getform/backend URL, e.g. "https://formspree.io/f/xxxxx"
+  const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbxf8N1EqyadW-RfrUhVRtm5rus5obr0vUIQ-PQMCFFtEdjgpDvq-rkG-OLN2zwHLRp9/exec"; // Google Apps Script web app
+  const BRAND_CLASS = "brand-copy";                   // extra hook, optional
   /* Plan data — edit prices/specs here only */
   const PLANS = [
     { name:"Starter",  price:5,  featured:false, spec:"0.25 vCPU · 512 MB RAM", features:["Hard spend cap included","Custom domain + HTTPS","Logs and rollbacks","1 service"] },
     { name:"Standard", price:15, featured:true,  spec:"1 vCPU · 2 GB RAM",     features:["Hard spend cap included","Custom domain + HTTPS","Logs and rollbacks","Up to 3 services"] },
-    { name:"Pro",      price:30, featured:false, spec:"2 vCPU · 4 GB RAM",     features:["Hard spend cap included","Custom domain + HTTPS","Logs and rollbacks","Up to 10 services"] }
+    { name:"Pro",      price:30, featured:false,  spec:"2 vCPU · 4 GB RAM",     features:["Hard spend cap included","Custom domain + HTTPS","Logs and rollbacks","Up to 10 services"] }
   ];
   /* ============================================= */
 
   /* ---- brand name in one place ---- */
-  document.querySelectorAll("#brand-name, .brand-copy, #footer-brand").forEach(el => el.textContent = BRAND_NAME);
+  document.querySelectorAll("#brand-name, .brand-copy").forEach(el => el.textContent = BRAND_NAME);
   document.title = document.title.replace("Dockbay", BRAND_NAME);
   document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -480,7 +509,7 @@ footer .note{margin-top:1.25rem;font-size:.8rem}
     try {
       if (typeof window.plausible === "function") window.plausible(name, { props });
     } catch (_) { /* never break the page for analytics */ }
-    window.__dbEvents.push({ name, props, t: Date.now() });
+    if (window.__dbEvents) window.__dbEvents.push({ name, props, t: Date.now() });
   };
   window.__dbEvents = []; // internal event log (useful for debugging the test)
   trackEvent("page_view", { path: location.pathname });
@@ -515,8 +544,6 @@ footer .note{margin-top:1.25rem;font-size:.8rem}
     plansWrap.appendChild(card);
   });
 
-  const prefersReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   /* ---- plan selection: scroll + preselect + track ---- */
   plansWrap.addEventListener("click", e => {
     const btn = e.target.closest("[data-plan]");
@@ -524,8 +551,11 @@ footer .note{margin-top:1.25rem;font-size:.8rem}
     const plan = btn.dataset.plan;
     trackEvent("plan_selected", { plan });
     if (planSel) planSel.value = plan;
-    document.getElementById("waitlist").scrollIntoView({ behavior: prefersReduced() ? "auto" : "smooth" });
+    const form = document.getElementById("waitlist");
+    form.scrollIntoView({ behavior: prefersReduced() ? "auto" : "smooth" });
   });
+
+  const prefersReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---- form ---- */
   const form = document.getElementById("waitlist-form");
@@ -552,6 +582,7 @@ footer .note{margin-top:1.25rem;font-size:.8rem}
     }
 
     const data = Object.fromEntries(new FormData(form).entries());
+    data.plan_note = data.preferred_plan; // convenience alias for the validation test
 
     msg.className = "form-msg loading";
     msg.textContent = "Sending…";
@@ -567,12 +598,16 @@ footer .note{margin-top:1.25rem;font-size:.8rem}
     }
 
     try {
-      const res = await fetch(FORM_ENDPOINT, {
+      // no-cors + text/plain because the endpoint is a Google Apps Script web app
+      // that does not answer CORS preflight requests. The response is opaque, so
+      // success here only means "the request was sent" — the owner must verify
+      // rows in the sheet.
+      await fetch(FORM_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(data)
       });
-      if (!res.ok) throw new Error("HTTP " + res.status);
       msg.className = "form-msg success";
       msg.textContent = "You're on the list! Check your inbox soon.";
       form.reset();
